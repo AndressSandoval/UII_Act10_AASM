@@ -1,0 +1,49 @@
+{% extends 'base.html' %} 
+
+{% block title %}Inicio{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-light">
+        <h4>Catálogo de Videojuegos</h4>
+    </div>
+    <div class="card-body">
+        {% if videojuegos %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Duración (Horas)</th>
+                        <th>Año de Lanzamiento</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for juego in videojuegos %}
+                    <tr>
+                        <td>{{ juego.nombre }}</td>
+                        <td>{{ juego.duracion_horas }}</td>
+                        <td>{{ juego.ao_lanzamiento }}</td>
+                        <td>
+                            <a href="{% url 'edit' pk=juego.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                            
+                            <form action="{% url 'delete' pk=juego.pk %}" method="post" style="display:inline;">
+                                {% csrf_token %} <button type="submit" class="btn btn-sm btn-danger" 
+                                    onclick="return confirm('¿Confirmas que deseas eliminar el juego: {{ juego.nombre }}?')">
+                                    Eliminar
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="alert alert-info">Aún no hay videojuegos registrados. ¡Añade el primero!</p>
+        {% endif %}
+        <a href="{% url 'add' %}" class="btn btn-success mt-3">➕ Añadir Videojuego</a>
+    </div>
+</div>
+{% endblock content %}
